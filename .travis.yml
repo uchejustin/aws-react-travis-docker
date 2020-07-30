@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t react-app -f Dockerfile ./
+
+scrip:
+  - docker run -e CI=true react-app npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "react-app"
+  env: "ReactApp-env"
+  bucket_name: "elasticbeanstalk-us-east-2-304355919383"
+  bucket_path: "react-app"
+  on:
+    branch: master
+    
